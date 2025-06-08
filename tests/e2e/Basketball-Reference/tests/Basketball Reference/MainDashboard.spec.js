@@ -6,7 +6,7 @@ test('Page Load', async({ page }) => {
   console.log('Main Basketball Reference page loaded!');
 });
 
-test('Player Search', async({ page }) => {
+test('Player Search - Jaden Ivey', async({ page }) => {
   await page.goto('https://www.basketball-reference.com//');
   await page.getByRole('searchbox', { name: 'Enter a player, team or section name'}).fill('Jaden Ivey');
 
