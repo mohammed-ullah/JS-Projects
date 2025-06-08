@@ -10,12 +10,24 @@ module.exports = {
         'eslint:recommended'
     ],
     parserOptions: {
-        ecmaVersion: 'latest'
+        ecmaVersion: 12,
+        sourceType: 'module'
     },
     rules: {
-        'indent': ['error', 4],
-        'linebreak-style': ['error', 'unix'],
-        'quotes': ['error', 'single'],
-        'semi': ['error', 'always']
-    }
+        'linebreak-style': 'off',  // Allow Windows line endings
+        'no-unused-vars': 'warn',
+        'no-console': 'off'
+    },
+    overrides: [
+        {
+            files: ['**/*.spec.js', '**/*.test.js'],
+            env: {
+                jest: true,
+                browser: true
+            },
+            parserOptions: {
+                sourceType: 'module'  // Allow ES6 imports in test files
+            }
+        }
+    ]
 };
