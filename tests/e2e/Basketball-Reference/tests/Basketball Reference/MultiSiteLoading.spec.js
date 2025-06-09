@@ -23,7 +23,7 @@ test('Test that the various SR websites load', async({ page }) => {
                 found = true;
                 break;
             } catch (e) {
-                
+                //Intentionally Empty
             }
         }
         
