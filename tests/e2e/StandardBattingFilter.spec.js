@@ -1,8 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test("Baseball Reference page navigation and row selection via rank", async ({
-  page,
-}) => {
+test("Baseball Reference page navigation and filtering", async ({ page }) => {
   // Navigates to 2022 Phillies batting stats
   const baseURL =
     "https://www.baseball-reference.com/teams/PHI/2022.shtml#players_standard_batting";
@@ -66,13 +64,15 @@ test("Baseball Reference page navigation and row selection via rank", async ({
   expect(selectedRows).toBe(2);
   console.log(`  Confirmed ${selectedRows} players selected`);
 
-  // Applies filter
+  // Applies filter - Initially only had one locator for the filterbutton but realized it failed on occasion due to various factors such as ad and network load
   console.log("\nApplying Filter:");
   console.log("  Looking for filter button...");
-  await page.waitForTimeout(3000);
-  const filterButton = page.getByRole("button", {
-    name: "Show Only Selected Rows",
-  });
+  await page.waitForTimeout(10000);
+  const filterButton = page
+    .locator('button[onclick*="sr_st_statline_rowSelect"]')
+    .or(page.locator('button:has-text("Show Only Selected Rows")'))
+    .or(page.locator('button:has-text("Show Only Selected")'))
+    .or(page.getByRole("button", { name: /show.*selected.*rows/i }));
   await filterButton.waitFor({ state: "visible", timeout: 10000 });
   await filterButton.click();
   await page.waitForTimeout(1000);
@@ -81,10 +81,10 @@ test("Baseball Reference page navigation and row selection via rank", async ({
   // Verifies filter results (I noticed that when a player is hidden it shows class as 'hidden-iso'. Therefore, I'm counting the visible rows (those without "hidden" in their class) and separately counting the hidden rows (those with "hidden" in their class). Then I'm validating that exactly 2 players remain visible and that the number of hidden players equals the original total minus 2.)
   const afterFilterCount = await battingTable
     .locator('tbody tr[data-row]:not([class*="hidden"])')
-    .count(); //2
+    .count();
   const hiddenCount = await battingTable
     .locator('tbody tr[data-row][class*="hidden"]')
-    .count(); //28
+    .count();
 
   expect(afterFilterCount).toBe(2);
   expect(hiddenCount).toBe(totalPlayerRows - 2);
