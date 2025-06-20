@@ -13,34 +13,21 @@ module.exports = defineConfig({
     trace: "on-first-retry",
     screenshot: "only-on-failure",
     video: "retain-on-failure",
+    timeout: 60000,
   },
 
   projects: [
     {
-      name: "baseball-reference-chromium",
-      testDir: "./tests/e2e",
-      use: {
-        ...devices["Desktop Chrome"],
-        timeout: 60000,
-      },
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
     },
-
     {
-      name: "baseball-reference-firefox",
-      testDir: "./tests/e2e",
-      use: {
-        ...devices["Desktop Firefox"],
-        timeout: 60000,
-      },
+      name: "firefox",
+      use: { ...devices["Desktop Firefox"] },
     },
-
     {
-      name: "baseball-reference-webkit",
-      testDir: "./tests/e2e",
-      use: {
-        ...devices["Desktop Safari"],
-        timeout: 60000,
-      },
+      name: "webkit",
+      use: { ...devices["Desktop Safari"] },
     },
   ],
 });
