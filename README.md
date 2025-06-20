@@ -2,8 +2,8 @@
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/mohammed-ullah/phillies-batting-tests.git
-cd phillies-batting-tests
+git clone https://github.com/mohammed-ullah/SR-Project.git
+cd SR-Project
 ```
 
 2. Install dependencies:
