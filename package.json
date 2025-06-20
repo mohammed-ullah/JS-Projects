@@ -7,9 +7,8 @@
     "test:unit:coverage": "jest --coverage",
     "test:unit:watch": "jest --watch",
     "test:e2e": "npx playwright test",
-    "test:e2e:basketball": "npx playwright test --project=basketball-reference-chromium",
-    "test:e2e:basketball-all": "npx playwright test tests/e2e/Basketball-Reference",
-    "test:all": "npm run test:unit && npm run test:e2e:basketball",
+    "test:e2e:all": "npx playwright test tests/e2e",
+    "test:all": "npm run test:unit && npm run test:e2e",
     "lint": "eslint src/ tests/ --ext .js",
     "lint:fix": "eslint src/ tests/ --ext .js --fix"
   },
