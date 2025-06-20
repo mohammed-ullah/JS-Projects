@@ -2,9 +2,9 @@
 
 Before running this project, ensure you have the following installed:
 
-- **Node.js** (version 16 or higher) - [Download here](https://nodejs.org/)
+- **Node.js** (version 16 or higher) - [Download here](https://nodejs.org/en/download)
 - **npm** (comes with Node.js installation)
-- **Git** - [Download here](https://git-scm.com/) (includes Git Bash for Windows)
+- **Git** - [Download here](https://git-scm.com/downloads) (includes Git Bash for Windows)
 
 ## Installation
 
