@@ -95,7 +95,9 @@ test("Testing Filtering on Standard Batting Table", async ({ page }) => {
       lastError = e;
       try {
         await page.waitForTimeout(2500);
-      } catch {}
+      } catch {
+        // WebKit sometimes closes the page unexpectedly during retries; this prevents a crash if waitForTimeout runs on a closed page
+      }
     }
   }
 
