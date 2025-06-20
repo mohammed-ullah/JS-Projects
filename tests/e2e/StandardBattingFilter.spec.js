@@ -32,10 +32,15 @@ test("Testing Filtering on Standard Batting Table", async ({ page }) => {
 
   const totalPlayerRows = await battingTable
     .locator("tbody tr[data-row]")
+    .filter({
+      hasNot: page.locator('th[aria-label="Player"]'),
+    })
     .count();
   const initialVisibleCount = await battingTable
     .locator('tbody tr[data-row]:not([class*="hidden"])')
+    .filter({ hasNot: page.locator('th[aria-label="Player"]') })
     .count();
+
   expect(initialVisibleCount).toBe(totalPlayerRows);
 
   console.log("\nInitial Results:");
@@ -112,9 +117,12 @@ test("Testing Filtering on Standard Batting Table", async ({ page }) => {
   // I noticed that when a player is hidden it shows class as 'hidden-iso'. Therefore, I'm counting the visible rows (those without "hidden" in their class) and separately counting the hidden rows (those with "hidden" in their class). Then I'm validating that exactly 2 players remain visible and that the number of hidden players equals the original total minus 2.s
   const afterFilterCount = await battingTable
     .locator('tbody tr[data-row]:not([class*="hidden"])')
+    .filter({ hasNot: page.locator('th[aria-label="Player"]') })
     .count();
+
   const hiddenCount = await battingTable
     .locator('tbody tr[data-row][class*="hidden"]')
+    .filter({ hasNot: page.locator('th[aria-label="Player"]') })
     .count();
 
   expect(afterFilterCount).toBe(2);
