@@ -25,10 +25,22 @@ tests/e2e/StandardBattingFilter.spec.js
 
 ## CI/CD Process
 
+### Branch Protection Strategy
 - `main` branch is protected - no direct commits allowed
+- All changes must go through Pull Request workflow
 - Development workflow: feature/release branch → PR → main
-- Automated status checks run on merge to main:
-  - ESLint code quality checks
-  - E2E test execution
-  - Jest unit tests
-- All checks must pass before merge completion
+
+### GitHub Actions Automation
+- Pull requests to `main` automatically trigger GitHub Actions workflows
+- Automated status checks execute in parallel:
+  - **ESLint**: Code quality and style enforcement
+  - **E2E Tests**: Full Playwright test suite execution
+  - **Jest Unit Tests**: Component and utility function testing
+- All status checks must pass (green) before merge is allowed
+- Failed checks block merge and require fixes before proceeding
+
+### Quality Gates
+- Prevents broken code from reaching production
+- Ensures consistent code standards across team
+- Maintains test coverage and reliability
+- Automated feedback loop for developers
