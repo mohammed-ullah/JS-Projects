@@ -24,6 +24,15 @@ npm install
 npx playwright install
 ```
 
+## Running Tests
+
+```bash
+npm run test:all                    # Run all tests (unit + E2E)
+npm run test:e2e                    # Run E2E tests (headless)
+npx playwright test --headed        # Run E2E tests with visible browser
+npx playwright show-report          # View detailed test report
+```
+
 ## Test Location
 
 The main test file is located at:
