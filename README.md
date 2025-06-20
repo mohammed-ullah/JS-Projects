@@ -1,9 +1,17 @@
+## Prerequisites
+
+Before running this project, ensure you have the following installed:
+
+- **Node.js** (version 16 or higher) - [Download here](https://nodejs.org/)
+- **npm** (comes with Node.js installation)
+- **Git** - [Download here](https://git-scm.com/) (includes Git Bash for Windows)
+
 ## Installation
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/mohammed-ullah/SR-Project.git
-cd SR-Project
+git clone https://github.com/mohammed-ullah/phillies-batting-tests.git
+cd phillies-batting-tests
 ```
 
 2. Install dependencies:
