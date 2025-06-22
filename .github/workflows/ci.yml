@@ -2,57 +2,57 @@ name: Continuous Integration
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
     inputs:
       test_type:
-        description: 'Type of tests to run'
+        description: "Type of tests to run"
         required: true
-        default: 'all'
+        default: "all"
         type: choice
         options:
-        - all
-        - unit
-        - e2e
-        - lint
+          - all
+          - unit
+          - e2e
+          - lint
 
 jobs:
   unit-tests:
     runs-on: ubuntu-latest
     name: Unit Tests (Jest)
     if: github.event.inputs.test_type == 'all' || github.event.inputs.test_type == 'unit' || github.event_name != 'workflow_dispatch'
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 18
-        cache: 'npm'
-        
-    - name: Install dependencies
-      run: npm ci
-      
-    - name: Run unit tests with coverage
-      run: npm run test:unit:coverage
-      
-    - name: Upload unit test coverage
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: unit-test-coverage
-        path: coverage/
-        retention-days: 30
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests with coverage
+        run: npm run test:unit:coverage
+
+      - name: Upload unit test coverage
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unit-test-coverage
+          path: coverage/
+          retention-days: 30
 
   e2e-tests:
     runs-on: ubuntu-latest
     name: E2E Tests (Playwright)
     if: github.event.inputs.test_type == 'all' || github.event.inputs.test_type == 'e2e' || github.event_name != 'workflow_dispatch'
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -84,19 +84,19 @@ jobs:
     runs-on: ubuntu-latest
     name: Code Quality (Linting)
     if: github.event.inputs.test_type == 'all' || github.event.inputs.test_type == 'lint' || github.event_name != 'workflow_dispatch'
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 18
-        cache: 'npm'
-        
-    - name: Install dependencies
-      run: npm ci
-      
-    - name: Run ESLint
-      run: npm run lint
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint

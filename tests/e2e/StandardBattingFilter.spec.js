@@ -70,8 +70,8 @@ test("Testing Filtering on Standard Batting Table", async ({ page }) => {
   let filterClicked = false;
   let lastError = null;
 
-  // I noticed the filter button didn’t always behave consistently—sometimes it would shift or take too long to load because of ads or layout changes. So instead of relying on a single attempt, I built a retry loop that gives it up to five attempts. I also included multiple locator options to cover different variations of how the button might appear. This should mitigate any issues with the page loading inconsistently.
-  for (let i = 0; i < 4; i++) {
+  // I noticed the filter button didn’t always behave consistently—sometimes it would shift or take too long to load because of ads or layout changes. So instead of relying on a single attempt, I built a retry loop that gives it up to ten attempts. I also included multiple locator options to cover different variations of how the button might appear. This should mitigate any issues with the page loading inconsistently.
+  for (let i = 0; i < 10; i++) {
     try {
       const filterButton = page
         .locator('button[onclick*="sr_st_statline_rowSelect"]')
