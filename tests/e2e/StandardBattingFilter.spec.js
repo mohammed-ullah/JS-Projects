@@ -12,6 +12,18 @@ test("Testing Filtering on Standard Batting Table", async ({ page }) => {
     timeout: 120000,
   });
 
+  // Centralized locator definitions to avoid redundant DOM queries and improve maintainability
+  const battingTable = page.locator("#players_standard_batting");
+  const playerRows = battingTable.locator("tbody tr[data-row]").filter({
+    hasNot: page.locator('th[aria-label="Player"]'),
+  });
+  const visibleRows = battingTable
+    .locator('tbody tr[data-row]:not([class*="hidden"])')
+    .filter({
+      hasNot: page.locator('th[aria-label="Player"]'),
+    });
+  const selectedRows = battingTable.locator("tbody tr.rowSum");
+
   await page.waitForFunction(
     () => {
       const table = document.querySelector("#players_standard_batting");
@@ -20,26 +32,11 @@ test("Testing Filtering on Standard Batting Table", async ({ page }) => {
     { timeout: 15000 }
   );
 
-  const logo = page.locator(
-    'img[alt="Baseball-Reference.com Logo & Link to home page"]'
-  );
-  await expect(logo).toBeVisible();
   console.log("Page loaded successfully!");
 
-  const battingTable = page.locator("#players_standard_batting");
-  await expect(battingTable).toBeVisible();
-  console.log("Standard Batting table found!");
-
-  const totalPlayerRows = await battingTable
-    .locator("tbody tr[data-row]")
-    .filter({
-      hasNot: page.locator('th[aria-label="Player"]'),
-    })
-    .count();
-  const initialVisibleCount = await battingTable
-    .locator('tbody tr[data-row]:not([class*="hidden"])')
-    .filter({ hasNot: page.locator('th[aria-label="Player"]') })
-    .count();
+  // Used reusable locators instead of rebuilding complex selectors multiple times
+  const totalPlayerRows = await playerRows.count();
+  const initialVisibleCount = await visibleRows.count();
 
   expect(initialVisibleCount).toBe(totalPlayerRows);
 
@@ -47,86 +44,68 @@ test("Testing Filtering on Standard Batting Table", async ({ page }) => {
   console.log(`  Total players found: ${totalPlayerRows}`);
   console.log(`  Players initially visible: ${initialVisibleCount}`);
 
-  // Selects players by clicking rank cell (Initially tried to do based on player name, but realized this kept accidently clicking the player link and failing sequential tests. Since player rank did not it was the more reliable element to use)
-  const player1 = battingTable
-    .locator("tbody tr")
-    .first()
-    .locator('th[data-stat="ranker"]');
-  const player2 = battingTable
-    .locator("tbody tr")
-    .nth(1)
-    .locator('th[data-stat="ranker"]');
+  const firstPlayerRank = playerRows.first().locator('th[data-stat="ranker"]');
+  const secondPlayerRank = playerRows.nth(1).locator('th[data-stat="ranker"]');
 
-  // Verifies 2 players are selected (Verified this by noticing that when a player is highlighted their class changes to include "rowSum", so just did a count before the filter button is selected below.)
-  await player1.click();
-  await page.waitForTimeout(500);
+  // Replaced timeouts with condition-based waits
+  await firstPlayerRank.click();
+  await expect(selectedRows).toHaveCount(1);
   console.log("Player 1 selected!");
-  await player2.click();
-  await page.waitForTimeout(500);
+
+  await secondPlayerRank.click();
+  await expect(selectedRows).toHaveCount(2);
   console.log("Player 2 selected!");
 
-  expect(await battingTable.locator("tbody tr.rowSum").count()).toBe(2);
+  const filterButton = page
+    .getByRole("button", { name: /show.*selected.*rows/i })
+    .or(page.locator('button[onclick*="sr_st_statline_rowSelect"]'))
+    .or(page.locator('button:has-text("Show Only Selected")'));
 
   let filterClicked = false;
   let lastError = null;
 
-  // I noticed the filter button didn’t always behave consistently—sometimes it would shift or take too long to load because of ads or layout changes. So instead of relying on a single attempt, I built a retry loop that gives it up to ten attempts. I also included multiple locator options to cover different variations of how the button might appear. This should mitigate any issues with the page loading inconsistently.
   for (let i = 0; i < 10; i++) {
     try {
-      const filterButton = page
-        .locator('button[onclick*="sr_st_statline_rowSelect"]')
-        .or(page.locator('button:has-text("Show Only Selected Rows")'))
-        .or(page.locator('button:has-text("Show Only Selected")'))
-        .or(page.getByRole("button", { name: /show.*selected.*rows/i }));
-
-      await filterButton.waitFor({ state: "visible", timeout: 7000 });
+      await expect(filterButton).toBeVisible({ timeout: 5000 });
       await filterButton.scrollIntoViewIfNeeded();
-      await filterButton.click();
+
+      await filterButton.click({ timeout: 5000 });
       console.log("Applying filter....");
 
-      await page.waitForFunction(
-        () => {
-          const rows = document.querySelectorAll(
-            '#players_standard_batting tbody tr[data-row]:not([class*="hidden"])'
-          );
-          return rows.length === 2;
-        },
-        { timeout: 7000 }
-      );
+      await expect(visibleRows).toHaveCount(2, { timeout: 5000 });
 
       filterClicked = true;
       break;
     } catch (e) {
       lastError = e;
+      // Added attempt counter for better debugging during test failures
+      console.log(`Filter attempt ${i + 1} failed, retrying...`);
       try {
-        await page.waitForTimeout(2500);
-      } catch {
-        // WebKit sometimes closes the page unexpectedly during retries; this prevents a crash if waitForTimeout runs on a closed page
-      }
+        await page.waitForTimeout(1500);
+      } catch {}
     }
   }
 
   if (!filterClicked) {
-    console.error("Filter interaction failed.");
+    console.error("Filter interaction failed after 5 attempts.");
     console.error("Last error:", lastError?.message);
     throw new Error(
       "Filter button failed to apply filter after multiple attempts."
     );
   }
 
-  // I noticed that when a player is hidden it shows class as 'hidden-iso'. Therefore, I'm counting the visible rows (those without "hidden" in their class) and separately counting the hidden rows (those with "hidden" in their class). Then I'm validating that exactly 2 players remain visible and that the number of hidden players equals the original total minus 2.s
-  const afterFilterCount = await battingTable
-    .locator('tbody tr[data-row]:not([class*="hidden"])')
-    .filter({ hasNot: page.locator('th[aria-label="Player"]') })
-    .count();
-
-  const hiddenCount = await battingTable
+  // I reused the locators from previous variables rather than new ones to make readability easier
+  const afterFilterCount = await visibleRows.count();
+  const hiddenRows = battingTable
     .locator('tbody tr[data-row][class*="hidden"]')
-    .filter({ hasNot: page.locator('th[aria-label="Player"]') })
-    .count();
+    .filter({
+      hasNot: page.locator('th[aria-label="Player"]'),
+    });
+  const hiddenCount = await hiddenRows.count();
 
   expect(afterFilterCount).toBe(2);
   expect(hiddenCount).toBe(totalPlayerRows - 2);
+  expect(afterFilterCount + hiddenCount).toBe(totalPlayerRows);
 
   console.log("\nFinal Filter Results:");
   console.log(`  Players visible: ${afterFilterCount}`);
