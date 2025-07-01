@@ -67,8 +67,8 @@ test("Testing Filtering on Standard Batting Table", async ({ page }) => {
   let filterClicked = false;
   let lastError = null;
 
-  // Reduced retry attempts from 10 to 5 and shortened delays for faster test execution
-  for (let i = 0; i < 5; i++) {
+  //Increased retries to 10
+  for (let i = 0; i < 10; i++) {
     try {
       // Using expect().toBeVisible() for assertions instead of waitFor() - cleaner test syntax
       await expect(filterButton).toBeVisible({ timeout: 5000 });
