@@ -63,33 +63,34 @@ module.exports = defineConfig({
       },
     },
 
-    {
-      name: "firefox",
-      use: { ...devices["Desktop Firefox"] },
-    },
+    // Disabled other browsers - Chrome only
+    // {
+    //   name: "firefox",
+    //   use: { ...devices["Desktop Firefox"] },
+    // },
 
-    {
-      name: "webkit",
-      use: { ...devices["Desktop Safari"] },
-    },
+    // {
+    //   name: "webkit",
+    //   use: { ...devices["Desktop Safari"] },
+    // },
 
-    /* Mobile testing */
-    {
-      name: "mobile-chrome",
-      use: {
-        ...devices["Pixel 5"],
-        launchOptions: {
-          args: process.env.CI
-            ? ["--no-sandbox", "--disable-setuid-sandbox"]
-            : [],
-        },
-      },
-    },
+    // {
+    //   name: "mobile-chrome",
+    //   use: {
+    //     ...devices["Pixel 5"],
+    //     launchOptions: {
+    //       args: process.env.CI ? [
+    //         "--no-sandbox",
+    //         "--disable-setuid-sandbox"
+    //       ] : []
+    //     }
+    //   },
+    // },
 
-    {
-      name: "mobile-safari",
-      use: { ...devices["iPhone 12"] },
-    },
+    // {
+    //   name: "mobile-safari",
+    //   use: { ...devices["iPhone 12"] },
+    // },
   ],
 
   /* Global test timeout */
