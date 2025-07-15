@@ -1,0 +1,27 @@
+yamlversion: "3.8"
+
+services:
+  playwright-tests:
+    build: .
+    volumes:
+      - ./test-results:/app/test-results
+      - ./playwright-report:/app/playwright-report
+    environment:
+      - CI=true
+      - HEADLESS=true
+    networks:
+      - test-network
+
+  # Optional: Run your app under test
+  web-app:
+    image: nginx:alpine
+    ports:
+      - "3000:80"
+    volumes:
+      - ./dist:/usr/share/nginx/html
+    networks:
+      - test-network
+
+networks:
+  test-network:
+    driver: bridge
