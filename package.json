@@ -1,6 +1,7 @@
 {
   "name": "js-projects",
   "version": "1.0.0",
+  "description": "JavaScript projects with Jest unit tests and Playwright e2e tests",
   "scripts": {
     "test": "jest",
     "test:unit": "jest",
@@ -8,10 +9,39 @@
     "test:unit:watch": "jest --watch",
     "test:e2e": "npx playwright test",
     "test:e2e:all": "npx playwright test tests/e2e",
+    "test:e2e:headed": "npx playwright test --headed",
+    "test:e2e:debug": "npx playwright test --debug",
+    "test:e2e:ui": "npx playwright test --ui",
+    "test:e2e:chromium": "npx playwright test --project=chromium",
+    "test:e2e:firefox": "npx playwright test --project=firefox",
+    "test:e2e:webkit": "npx playwright test --project=webkit",
     "test:all": "npm run test:unit && npm run test:e2e",
     "lint": "eslint src/ tests/ --ext .js",
-    "lint:fix": "eslint src/ tests/ --ext .js --fix"
+    "lint:fix": "eslint src/ tests/ --ext .js --fix",
+    "report": "npx playwright show-report",
+    "docker:build": "docker build -t js-projects-tests .",
+    "docker:test": "docker run --rm -v %cd%/test-results:/app/test-results -v %cd%/playwright-report:/app/playwright-report js-projects-tests npm run test:e2e",
+    "docker:test:linux": "docker run --rm -v $(pwd)/test-results:/app/test-results -v $(pwd)/playwright-report:/app/playwright-report js-projects-tests npm run test:e2e",
+    "docker:test:unit": "docker run --rm -v %cd%/coverage:/app/coverage js-projects-tests npm run test:unit:coverage",
+    "docker:test:all": "docker run --rm -v %cd%/test-results:/app/test-results -v %cd%/coverage:/app/coverage js-projects-tests npm run test:all",
+    "docker:compose": "docker-compose up --build --abort-on-container-exit",
+    "docker:compose:parallel": "docker-compose up --scale test-runner=3 --build",
+    "docker:shell": "docker run --rm -it -v %cd%:/app js-projects-tests /bin/bash",
+    "docker:clean": "docker image prune -f && docker container prune -f",
+    "docker:report": "docker run --rm -p 9323:9323 -v %cd%/playwright-report:/app/playwright-report js-projects-tests npx playwright show-report --host 0.0.0.0",
+    "clean": "rimraf test-results playwright-report coverage node_modules/.cache",
+    "install:browsers": "npx playwright install"
   },
+  "keywords": [
+    "javascript",
+    "jest",
+    "playwright",
+    "testing",
+    "automation",
+    "docker",
+    "e2e",
+    "unit-tests"
+  ],
   "devDependencies": {
     "@playwright/test": "^1.40.0",
     "eslint": "^8.57.1",
@@ -23,5 +53,8 @@
     "dotenv": "^17.0.1",
     "mysql2": "^3.14.1",
     "pg": "^8.16.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
