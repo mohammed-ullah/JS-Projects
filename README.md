@@ -9,7 +9,7 @@ Before running this project, ensure you have the following installed:
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/mohammed-ullah/SR-Project.git
+git clone https://github.com/mohammed-ullah/Playwright-Demo.git
 cd SR-Project
 ```
 
