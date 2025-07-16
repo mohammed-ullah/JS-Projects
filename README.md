@@ -9,8 +9,8 @@ Before running this project, ensure you have the following installed:
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/mohammed-ullah/SR-Project.git
-cd SR-Project
+git clone https://github.com/mohammed-ullah/Playwright-Demo.git
+cd Playwright-Demo
 ```
 
 2. Install dependencies:
