@@ -10,7 +10,7 @@ Before running this project, ensure you have the following installed:
 1. Clone this repository:
 ```bash
 git clone https://github.com/mohammed-ullah/Playwright-Demo.git
-cd SR-Project
+cd Playwright-Demo
 ```
 
 2. Install dependencies:
