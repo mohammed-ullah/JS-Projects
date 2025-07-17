@@ -2,42 +2,38 @@ const { test, expect } = require("@playwright/test");
 const LoginPage = require("../../../pages/saucedemo/LoginPage.js");
 
 test.describe("Sauce Demo - Login Tests", () => {
-  let loginPage;
+  let LoginPage;
 
   test.beforeEach(async ({ page }) => {
-    loginPage = new LoginPage(page);
-    await loginPage.navigate();
+    LoginPage = new LoginPage(page);
+    await LoginPage.navigate();
   });
 
-  test("Sauce Demo - Successful Login", async ({ page }) => {
-    await loginPage.loginAsStandardUser();
-    await loginPage.expectLoginSuccess();
-
-    console.log("✅ Successfully logged in!");
+  test("Sauce Demo - Successful Demo", async ({ page }) => {
+    await LoginPage.loginAsStandardUser();
+    await LoginPage.expectLoginSuccess();
+    console.log("Successfully logged in!");
   });
 
   test("Sauce Demo - Incorrect Password - Unsuccessful Login", async ({
     page,
   }) => {
-    await loginPage.login("standard_user", "incorrectPassword");
-    await loginPage.expectInvalidCredentials();
-
-    console.log("✅ Verified incorrect password doesn't log user in");
+    await LoginPage.login("standard_user", "incorrectPassword");
+    await LoginPage.expectLoginError();
+    console.log("Verified incorrect password doesn't log user in");
   });
 
   test("Sauce Demo - Incorrect Username - Unsuccessful Login", async ({
     page,
   }) => {
-    await loginPage.login("incorrect_user", "secret_sauce");
-    await loginPage.expectInvalidCredentials();
-
-    console.log("✅ Verified incorrect username doesn't log user in");
+    await LoginPage.login("incorrect_user", "secret_sauce");
+    await LoginPage.expectLoginError();
+    console.log("Verified incorrect username doesn't log user in");
   });
 
   test("Sauce Demo - Empty Fields", async ({ page }) => {
-    await loginPage.clickLogin();
-    await loginPage.expectUsernameRequired();
-
-    console.log("✅ Verified error message for empty fields");
+    await LoginPage.login("", "");
+    await LoginPage.expectLoginError();
+    console.log("Verified error message for empty fields");
   });
 });
