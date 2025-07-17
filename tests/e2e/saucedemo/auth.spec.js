@@ -5,8 +5,8 @@ test.describe("Sauce Demo - Login Tests", () => {
   let LoginPage;
 
   test.beforeEach(async ({ page }) => {
-    LoginPage = new LoginPage(page);
-    await LoginPage.navigate();
+    const LoginPage = new LoginPage(page);
+    await loginPage.navigate();
   });
 
   test("Sauce Demo - Successful Demo", async ({ page }) => {
