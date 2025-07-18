@@ -15,4 +15,4 @@ ENV PWTEST_SKIP_TEST_OUTPUT=1
 
 RUN mkdir -p test-results
 
-CMD ["npm", "test"]
+CMD ["npm", "test", "test:e2e"]

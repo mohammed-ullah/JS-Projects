@@ -38,14 +38,17 @@ test("Add Products to cart and remove one", async ({ page }) => {
 test("Sorting by name descending ", async ({ page }) => {
   const productPage = new ProductPage(page);
   await productPage.ZASort();
+  console.log("Verified sorting by name Z to A works");
 });
 
 test("Sorting by price descending ", async ({ page }) => {
   const productPage = new ProductPage(page);
   await productPage.hiloSort();
+  console.log("Verified sorting by price descending works");
 });
 
 test("Sorting by price ascending ", async ({ page }) => {
   const productPage = new ProductPage(page);
   await productPage.lohiSort();
+  console.log("Verified sorting by price ascending works");
 });
