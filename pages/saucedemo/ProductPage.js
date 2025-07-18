@@ -44,7 +44,6 @@ class productPage {
     await expect(
       this.page.locator(".inventory_item_name").first()
     ).toContainText(BACKPACK);
-    console.log("Verified A to Z Sort worked correctly");
   }
 
   async ZASort() {
@@ -53,7 +52,6 @@ class productPage {
     await expect(
       this.page.locator(".inventory_item_name").first()
     ).toContainText(REDTSHIRT);
-    console.log("Verified Z to A sort worked correctly");
   }
 
   async lohiSort() {
@@ -62,7 +60,6 @@ class productPage {
     await expect(
       this.page.locator(".inventory_item_name").first()
     ).toContainText(ONESIE);
-    console.log("Verified sorting price from low to high worked correctly");
   }
 
   async hiloSort() {
@@ -71,7 +68,6 @@ class productPage {
     await expect(
       this.page.locator(".inventory_item_name").first()
     ).toContainText(FLEECE);
-    console.log("Verified sorting from high to low worked correctly");
   }
 }
 
